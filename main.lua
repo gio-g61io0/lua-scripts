@@ -59,4 +59,6 @@ one, two, three = foo.multiple_values()
 print(one, two, three)
 print("1:", foo.packing("Hello", "world", "!", 1, 2, 3))
 print("2:", foo.packing("Hello", "world", "!", 1, 2, 3), "<lost>")
+print("3:", foo.fib_func(5))
+print("4:", foo.call_mt())
 
