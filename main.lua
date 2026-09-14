@@ -11,14 +11,14 @@ This is a multi line
 local nothing = nil
 
 local function hello(name)
-	print("Hello!",name)
+	print("Hello!", name)
 end
 
-local greet = function (name)
+local greet = function(name)
 	print("greetings, " .. name .. "!")
 end
-local higher_order = function (value)
-	return function (another)
+local higher_order = function(value)
+	return function(another)
 		return value + another
 	end
 end
@@ -27,17 +27,17 @@ add_twenty = higher_order(20)
 
 local val = add_twenty(5)
 
-local list = {"first", 2, false, add_twenty}
+local list = { "first", 2, false, add_twenty }
 
 print("First element is indexed 1", list[1])
 print("Fourth is ", list[4](5))
 
 local key = "Gio"
 
-local t= {
+local t = {
 	[key] = "My name is the key",
 	["an expression"] = "An expression is used as a key",
-	[function () end] = "A function is used as a key",
+	[function() end] = "A function is used as a key",
 }
 print(t["Gio"])
 print(t["an expression"])
@@ -61,4 +61,3 @@ print("1:", foo.packing("Hello", "world", "!", 1, 2, 3))
 print("2:", foo.packing("Hello", "world", "!", 1, 2, 3), "<lost>")
 print("3:", foo.fib_func(5))
 print("4:", foo.call_mt())
-
