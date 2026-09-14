@@ -67,6 +67,27 @@ M.start_presentation = function(opts)
 	local current_slide = 1
 	opts.bufnr = opts.bufnr or 0
 
+	local editor_width = vim.o.columns
+	local editor_height = vim.o.lines
+
+	--- @type vim.api.keyset.win_config
+	local windows = {
+		header = {
+			relative = "editor",
+			width = editor_width,
+			height = 1,
+			style = "minimal",
+			col = 1,
+			row = 1,
+		},
+		body = {
+			relative = "editor",
+			width = editor_width,
+			height = editor_height - 1,
+			border = { " ", " ", " ", " ", " ", " ", " ", " " },
+			style = "minimal",
+		},
+	}
 	local lines = vim.api.nvim_buf_get_lines(opts.bufnr, 0, -1, false)
 
 	local parsed = parse_slides(lines)
@@ -74,18 +95,21 @@ M.start_presentation = function(opts)
 
 	local float, win = create_float()
 
-	vim.api.nvim_buf_set_lines(float, 0, -1, false, parsed.slides[current_slide])
+	local change_slide_content = function(idx)
+		vim.api.nvim_buf_set_lines(float, 0, -1, false, parsed.slides[idx].body)
+	end
 
+	change_slide_content(1)
 	vim.print("parsed slides length", #parsed.slides)
 
 	vim.keymap.set("n", "p", function()
 		current_slide = math.max(current_slide - 1, 1)
-		vim.api.nvim_buf_set_lines(float, 0, -1, false, parsed.slides[current_slide])
+		change_slide_content(current_slide)
 	end, { buffer = float })
 
 	vim.keymap.set("n", "n", function()
 		current_slide = math.min(current_slide + 1, #parsed.slides)
-		vim.api.nvim_buf_set_lines(float, 0, -1, false, parsed.slides[current_slide])
+		change_slide_content(current_slide)
 	end, { buffer = float })
 
 	vim.keymap.set("n", "q", function()
@@ -116,6 +140,9 @@ local scratch_buffer = vim.api.nvim_create_buf(true, true)
 local test_md = [[
 #Hello
 
+This is the first line
+This is the first line
+This is the first line
 This is the first line
 
 #World
